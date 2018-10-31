@@ -71,7 +71,9 @@ export default {
                     title : doc.data().title,
                     task : doc.data().task,
                     date : doc.data().date,
-                    contentid : doc.data().contentid
+                    contentid : doc.data().contentid,
+                    editing : doc.data().editing,
+                    completed : doc.data().completed
 
                 }
                 this.todos.push(data)
@@ -128,6 +130,15 @@ export default {
             todo.editing = true
         },
         doneEdit(todo) {
+            db.collection('task').where('contentid', '==', todo.contentid).get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    doc.ref.update({
+                        title: todo.title,
+                        task: todo.task
+                    })
+                })
+            })
             todo.editing = false
         },
 
