@@ -48,6 +48,7 @@
 
 <script>
 import db from './firebaseInit'
+import firebase from 'firebase'
 export default {
     name: 'card',
     data() {
@@ -65,7 +66,9 @@ export default {
         
     },
     created () {
-        db.collection('task').orderBy('date').get().then(querySnapshot =>{
+        const user = firebase.auth().currentUser;
+        const uid = user.uid
+        db.collection(uid).orderBy('date').get().then(querySnapshot =>{
             querySnapshot.forEach(doc => {
                 const data = {
                     title : doc.data().title,
@@ -77,12 +80,14 @@ export default {
 
                 }
                 this.todos.push(data)
+
             })
         })
     },
     methods: {
         addTodo() {
-
+                const user = firebase.auth().currentUser;
+                const uid = user.uid
                 var d = new Date();
                 var NewContentId = Math.floor((Math.random() * 100) + 1)
                 if (this.task == '') {
@@ -93,7 +98,7 @@ export default {
                         this.title = 'Task ' + this.idForTodo
                     }
 
-                    db.collection('task').add({
+                    db.collection(uid).add({
                         title: this.title,
                         task: this.task,
                         completed: false,
@@ -116,8 +121,10 @@ export default {
                 }
             },
             close(index, todo) {
+                const user = firebase.auth().currentUser;
+                const uid = user.uid
                 if (confirm('Are you sure?')) {
-                    db.collection('task').where('contentid', '==', todo.contentid).get()
+                    db.collection(uid).where('contentid', '==', todo.contentid).get()
                         .then(querySnapshot => {
                             querySnapshot.forEach(doc => {
                                 doc.ref.delete();
@@ -130,7 +137,9 @@ export default {
                 todo.editing = true
             },
             doneEdit(todo) {
-                db.collection('task').where('contentid', '==', todo.contentid).get()
+                const user = firebase.auth().currentUser;
+                const uid = user.uid
+                db.collection(uid).where('contentid', '==', todo.contentid).get()
                     .then(querySnapshot => {
                         querySnapshot.forEach(doc => {
                             doc.ref.update({

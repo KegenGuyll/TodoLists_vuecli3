@@ -78,6 +78,8 @@ router.beforeEach(( to, from, next) => {
     //Check if is logged in 
     if (firebase.auth().currentUser){
       //Go to login
+      const user = firebase.auth().currentUser;
+      const uid = user.uid
       next({
         path: '/',
         query: {
