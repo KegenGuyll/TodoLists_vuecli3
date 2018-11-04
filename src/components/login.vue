@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container" id="space">
     <div class="row">
         <div class="col s12 m6 offset-m3 ">
             <div class="card">
@@ -59,7 +59,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .card-panel,
 .card {
     background-color: #66b5c8;
@@ -140,5 +140,10 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 
 .input-field label {
     color: #33606b;
+}
+
+#space{
+
+    margin-top: 17vh;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container" id="space">
     <div class="row">
         <div class="col s12 m6 offset-m3 ">
             <div class="card">
@@ -32,7 +32,7 @@
 </div>
 </template>
 
-<script>
+<script scoped>
 import firebase from 'firebase';
 
 
@@ -143,4 +143,14 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 .input-field label {
     color: #33606b;
 }
+
+.input-field input[type=text]:focus + label {
+     color: #000;
+}
+
+#space{
+
+    margin-top: 17vh;
+}
+
 </style>
