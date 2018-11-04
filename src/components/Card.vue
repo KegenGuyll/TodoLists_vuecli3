@@ -1,9 +1,9 @@
 <template>
 <div class="container">
     <div class="row">
-        <div class="col s12">
-            <div class="card-panel">
-                <span class="white-text">
+        <div class="col s12 m6 offset-m3 ">
+            <div class="card">
+                <div class="card-content white-text center">
                     <div>
                         <div class="input-field col s12">
                             <input id="title" type="text" class="white-text" v-model="title">
@@ -16,9 +16,9 @@
                             <label for="textarea2"> Task</label>
                         </div>
                     </div>
-                </span>
-                <div style="text-algin right">
-                    <a class="waves-effect waves-light btn right-text" v-on:click="addTodo"><i class="material-icons right">send</i>Send</a>
+                    <div style="text-algin right">
+                        <a class="waves-effect waves-light btn right-text" v-on:click="addTodo"><i class="material-icons right">send</i>Send</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,14 +94,14 @@ export default {
                     }
 
                     db.collection('task').add({
-                            title: this.title,
-                            task: this.task,
-                            completed: false,
-                            editing: false,
-                            date: d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear(),
-                            contentid: NewContentId
-                        })
-                        
+                        title: this.title,
+                        task: this.task,
+                        completed: false,
+                        editing: false,
+                        date: d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear(),
+                        contentid: NewContentId
+                    })
+
                     this.todos.push({
                         title: this.title,
                         task: this.task,
@@ -114,37 +114,37 @@ export default {
                     this.title = ''
                     this.task = ''
                 }
-        },
-        close(index,todo) {
-             if ( confirm('Are you sure?')){
-                 db.collection('task').where('contentid', '==' , todo.contentid).get()
-                 .then(querySnapshot => {
-                     querySnapshot.forEach(doc =>{
-                         doc.ref.delete();
-                         this.todos.splice(index, 1)
-                     })
-                 })
-             }
-        },
-        editTodo(todo) {
-            todo.editing = true
-        },
-        doneEdit(todo) {
-            db.collection('task').where('contentid', '==', todo.contentid).get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    doc.ref.update({
-                        title: todo.title,
-                        task: todo.task
+            },
+            close(index, todo) {
+                if (confirm('Are you sure?')) {
+                    db.collection('task').where('contentid', '==', todo.contentid).get()
+                        .then(querySnapshot => {
+                            querySnapshot.forEach(doc => {
+                                doc.ref.delete();
+                                this.todos.splice(index, 1)
+                            })
+                        })
+                }
+            },
+            editTodo(todo) {
+                todo.editing = true
+            },
+            doneEdit(todo) {
+                db.collection('task').where('contentid', '==', todo.contentid).get()
+                    .then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
+                            doc.ref.update({
+                                title: todo.title,
+                                task: todo.task
+                            })
+                        })
                     })
-                })
-            })
-            todo.editing = false
-        },
+                todo.editing = false
+            },
 
 
-    }
-}
+        }
+        }
 
 </script>
 
@@ -232,6 +232,9 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 .input-field label {
     color: #33606b;
 }
+
+
+
 </style>
 
 <!--

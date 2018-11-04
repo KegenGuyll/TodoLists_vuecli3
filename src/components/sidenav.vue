@@ -3,7 +3,11 @@
   <nav>
     <div class="row">
        <a href="#" data-target="slide-out" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
-       <input id="textbox" type="text" v-model="item_search">
+       <ul class="right">
+          <li v-if="!isLoggedIn"><router-link to='/login'>Login</router-link></li>
+          <li v-if="!isLoggedIn"><router-link to='/register'>Register</router-link></li>
+          <li v-if="isLoggedIn"><span id="logout" v-on:click="logout">Logout</span></li>
+       </ul>
     </div>
   </nav>
   <ul id="slide-out" class="sidenav">
@@ -12,12 +16,27 @@
 </template>
 
 <script>
-// import db from './firebaseInit'
+import firebase from 'firebase';
+
 export default {
   name: 'sidenav',
   data(){
     return{
-      item_search: ''
+      isLoggedIn: false,
+      currentUser: false
+    }
+  },
+  created(){
+    if(firebase.auth().currentUser){
+      this.isLoggedIn = true;
+      this.currentUser = firebase.auth().currentUser.email;
+    }
+  },
+  methods: {
+    logout: function() {
+      firebase.auth().signOut().then(() => {
+        this.$router.go({path: this.$router.path})
+      })
     }
   }
 }
@@ -26,23 +45,17 @@ export default {
 <style scoped>
 nav {
   background-color: #66b5c8 !important;
-  color: #7dd0e6;
+  
 }
 
 #slide-out {
   background-color: #476e76
 }
 
-#textbox{
-  background-color: #476e766e;
-    flex: auto;
-    height: 0%;
-    width: 50%;
-    border-radius: 10px;
-    align-content: center;
-    margin-left: 13%;
-    border-bottom: hidden;
-    color: #ffffff
+#logout{
+  margin-right: 3vw;
+  cursor: pointer;
+  color: #ffffff;
 }
 </style>
 

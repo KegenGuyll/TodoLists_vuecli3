@@ -2,7 +2,7 @@
   <v-app>
     <sidenav/>
     <v-content>
-      <card/>
+      <router-view/>
     </v-content>
   </v-app>
 </template>
